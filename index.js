@@ -14,22 +14,21 @@ app.get('/', function (req, res) {
 });
 
 /**/
-
 // Configuração do multer
-const storage = multer.memoryStorage();  // Armazenando em memória (para simplificação)
+const storage = multer.memoryStorage();  // Armazenamento em memória
 const upload = multer({ storage: storage });
 
 // Rota POST para receber o arquivo e retornar os dados
 app.post('/api/fileanalyse', upload.single('upfile'), (req, res) => {
-  console.log("POST /api/fileanalyse - Iniciando upload");
+  console.log("POST /api/fileanalyse - Iniciando o upload do arquivo");
 
   // Verifica se o arquivo foi enviado
   if (!req.file) {
-    console.log("Nenhum arquivo foi enviado");
+    console.log("Nenhum arquivo foi enviado.");
     return res.status(400).json({ error: "No file uploaded" });
   }
 
-  // Extrair dados do arquivo
+  // Extrair os dados do arquivo
   const file = req.file;
   const fileMetadata = {
     name: file.originalname,        // Nome original do arquivo
@@ -37,12 +36,13 @@ app.post('/api/fileanalyse', upload.single('upfile'), (req, res) => {
     size: file.size                // Tamanho do arquivo em bytes
   };
 
-  // Log dos dados do arquivo para debug
-  console.log(`Arquivo recebido: ${file.originalname}`);
+  // Log para mostrar o arquivo recebido e seus detalhes
+  console.log("Arquivo recebido:");
+  console.log(`Nome do arquivo: ${file.originalname}`);
   console.log(`Tipo MIME: ${file.mimetype}`);
-  console.log(`Tamanho: ${file.size} bytes`);
+  console.log(`Tamanho do arquivo: ${file.size} bytes`);
 
-  // Retorna as informações do arquivo
+  // Retorna as informações do arquivo em formato JSON
   res.json(fileMetadata);
 });
 
